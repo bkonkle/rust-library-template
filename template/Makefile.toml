@@ -34,7 +34,7 @@ command = "sqlx"
 args = ["db", "reset"]
 
 [tasks.integration]
-env = { "RUN_MODE" = "test", "RUST_LOG" = "info,aws_config::meta::region=warn,aws_smithy_http_tower::parse_response=warn,aws_config::meta::credentials::chain=warn", "RUST_TEST_THREADS" = 1, "RUST_BACKTRACE" = 0 }
+env = { "RUN_MODE" = "test", "RUST_LOG" = "info", "RUST_TEST_THREADS" = 1, "RUST_BACKTRACE" = 0 }
 command = "cargo"
 args = ["test", "--", "--nocapture", "--ignored", "${@}"]
 

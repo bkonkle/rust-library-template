@@ -20,8 +20,6 @@ dist/
 # Auto-generated Schema
 schema.graphql
 
-{% if crate_type == "lib" %}
-Cargo.lock
-{% endif %}
+{% if crate_type == "lib" %}Cargo.lock
 
-.DS_Store
+{% endif %}.DS_Store
