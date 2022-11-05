@@ -1,11 +1,18 @@
 [package]
-name = "{{project-name}}"
+name = "{{ project-name }}"
 version = "0.1.0"
+authors = ["{{ authors }}"]
 edition = "2021"
-description = "{{project-description}}"
-repository = "https://github.com/{{gh-username}}/{{project-name}}"
-license = "MIT OR Apache-2.0"
+description = "{{ project-description }}"
+repository = "https://github.com/{{gh-username}}/{{ project-name }}"
+license = "MIT"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+publish = false
 
 [dependencies]
+
+[profile.release]
+strip = true      # Automatically strip symbols from the binary.
+opt-level = "z"   # Optimize for size.
+lto = true        # Link time optimization.
+codegen-units = 1 # Allow for maximum size reduction optimizations.

@@ -48,13 +48,17 @@ cargo test
 ```
 
 ### Useful Commands
+
 {% if crate_type == "bin" %}
+
 - Build and run release version:
 
   ```shell
   cargo build --release && cargo run --release
   ```
+
 {% endif %}
+
 - Run Clippy:
 
   ```shell

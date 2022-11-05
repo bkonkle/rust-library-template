@@ -1,0 +1,44 @@
+[tasks.dev]
+env = { "RUST_LOG" = "info" }
+command = "cargo"
+args = ["run"]
+watch = true
+
+{% if crate_type == "bin" %}[tasks.docker]
+cwd = "./"
+command = "docker-compose"
+args = ["-f", "docker-compose.yml", "${@}"]
+
+[tasks.terraform]
+env = { "TF_VAR_base_endpoint" = "${TF_VAR_base_endpoint}" }
+cwd = "./infra/local"
+command = "terraform"
+args = ["${@}"]
+
+[tasks.db-create]
+workspace = false
+cwd = "./"
+command = "sqlx"
+args = ["db", "create"]
+
+[tasks.db-migrate]
+workspace = false
+cwd = "./"
+command = "sqlx"
+args = ["migrate", "run"]
+
+[tasks.db-reset]
+workspace = false
+cwd = "./"
+command = "sqlx"
+args = ["db", "reset"]
+
+[tasks.integration]
+env = { "RUN_MODE" = "test", "RUST_LOG" = "info,aws_config::meta::region=warn,aws_smithy_http_tower::parse_response=warn,aws_config::meta::credentials::chain=warn", "RUST_TEST_THREADS" = 1, "RUST_BACKTRACE" = 0 }
+command = "cargo"
+args = ["test", "--", "--nocapture", "--ignored", "${@}"]
+
+[tasks.integration-ci]
+env = { "RUN_MODE" = "ci", "RUST_LOG" = "info", "RUST_TEST_THREADS" = 1 }
+command = "cargo"
+args = ["test", "--", "--nocapture", "--ignored"]{% endif %}

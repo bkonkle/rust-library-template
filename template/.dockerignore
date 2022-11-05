@@ -1,0 +1,16 @@
+# Start by ignoring everything
+*
+
+# Package management
+!Cargo.toml
+!Cargo.lock
+!**/Cargo.toml
+!Makefile.toml
+
+# Configs
+!.cargo/
+!config/
+
+# Source
+!src/
+!tests/
