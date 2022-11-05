@@ -1,9 +1,7 @@
 use anyhow::Result;
 use std::sync::Arc;
 
-use crate::{
-    utils::{config::Config},
-};
+use crate::utils::config::Config;
 
 /// Dependencies needed by the resolvers
 pub struct Context {

@@ -1,4 +1,4 @@
-//! # {{ project-description }}
+//! # {{project-description}}
 #![forbid(unsafe_code)]
 
 #[cfg(test)]

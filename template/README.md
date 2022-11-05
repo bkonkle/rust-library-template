@@ -5,6 +5,8 @@
 [![CI](https://github.com/{{gh-username}}/{{project-name}}/workflows/CI/badge.svg)](https://github.com/{{gh-username}}/{{project-name}}/actions)
 [![Coverage Status](https://coveralls.io/repos/github/{{gh-username}}/{{project-name}}/badge.svg?branch=main)](https://coveralls.io/github/{{gh-username}}/{{project-name}}?branch=main)
 
+{{project-description}}
+
 ## Installation
 
 ### Cargo
@@ -98,7 +100,7 @@ cargo make integration
 To build locally, use Buildkit:
 
 ```sh
-DOCKER_BUILDKIT=1 docker build -t {{ project-name }} -f apps/api/Dockerfile .
+DOCKER_BUILDKIT=1 docker build -t {{project-name}} -f apps/api/Dockerfile .
 ```
 
 To clear the build cache:
@@ -110,7 +112,7 @@ docker builder prune --filter type=exec.cachemount
 To inspect the local filesystem:
 
 ```sh
-docker run --rm -it --entrypoint=/bin/bash {{ project-name }}
+docker run --rm -it --entrypoint=/bin/bash {{project-name}}
 ```
 
 To inspect the full build context:

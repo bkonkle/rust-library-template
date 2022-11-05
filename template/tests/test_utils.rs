@@ -3,14 +3,14 @@
 use anyhow::Result;
 use hyper::{client::HttpConnector, Client};
 use hyper_tls::HttpsConnector;
-use once_cell::sync::{Lazy, OnceCell};
+use once_cell::sync::Lazy;
 use std::{net::SocketAddr, sync::Arc, time::Duration};
 use tokio::time::sleep;
 
-use {{ project-package }}::{
+use {{crate_name}}::{
     context::Context,
-    utils::{config::get_config, http::http_client},
     run,
+    utils::{config::get_config, http::http_client},
 };
 
 static HTTP_CLIENT: Lazy<Client<HttpsConnector<HttpConnector>>> = Lazy::new(http_client);
