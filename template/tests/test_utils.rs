@@ -15,6 +15,11 @@ use {{crate_name}}::{
 
 static HTTP_CLIENT: Lazy<Client<HttpsConnector<HttpConnector>>> = Lazy::new(http_client);
 
+/// Creates an http/https client via Hyper
+pub fn http_client() -> Client<HttpsConnector<HttpConnector>> {
+    Client::builder().build::<_, Body>(HttpsConnector::new())
+}
+
 pub async fn run_server(context: Arc<Context>) -> Result<SocketAddr> {
     let (addr, server) = run(context).await?;
 

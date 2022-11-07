@@ -10,8 +10,17 @@ regex = "^[A-Za-z0-9][A-Za-z0-9-]{0,37}[A-Za-z0-9]$"
 type = "string"
 prompt = "Project description?"
 
+[placeholders.http]
+type = "boolean"
+
 [conditional.'crate_type == "lib"']
-ignore = ["src/main.rs", ".envrc.example", "tests/test_utils.rs"]
+ignore = [
+    "src/main.rs",
+    ".envrc.example",
+    "tests/test_utils.rs",
+    "utils.rs",
+    "utils/config.rs",
+]
 
 [conditional.'crate_type == "bin"']
 ignore = ["src/lib.rs"]

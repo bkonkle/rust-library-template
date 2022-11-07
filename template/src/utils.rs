@@ -1,8 +1,2 @@
-/// Config utilities based on config-rs
+/// Config utilities based on figment
 pub mod config;
-
-/// Utilities for working with http/https requests
-pub mod http;
-
-#[macro_use]
-extern crate anyhow;
