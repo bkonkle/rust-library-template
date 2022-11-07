@@ -44,6 +44,32 @@ To use build scripts from the _Makefile.toml_, install Cargo Make:
 cargo install cargo-make
 ```
 
+### pre-commit
+
+Install pre-commit to automatically set up Git hook scripts.
+
+In Ubuntu, the package to install is `pre-commit`:
+
+```sh
+sudo apt install pre-commit
+```
+
+On Mac with Homebrew, the package is also `pre-commit`:
+
+```sh
+brew install pre-commit
+```
+
+### libclang
+
+The `cargo-spellcheck` utility depends on [`libclang`](https://clang.llvm.org/doxygen/group__CINDEX.html).
+
+In Ubuntu, the package to install is `libclang-dev`:
+
+```sh
+sudo apt install libclang-dev
+```
+
 ### Running the Local dev server
 
 Use `cargo` to run the dev server locally:
