@@ -88,6 +88,7 @@ jobs:
           args: --no-deps --document-private-items --all-features --workspace --examples
 
   publish-dry-run:
+    if: ${{ false }}  # disable for now
     name: Publish dry run
     runs-on: ubuntu-latest
     steps:
