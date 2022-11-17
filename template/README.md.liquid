@@ -36,14 +36,6 @@ If you're using VS Code, configure the `rust-analyzer` plugin to use it (in _set
 }
 ```
 
-### Cargo Make
-
-To use build scripts from the _Makefile.toml_, install Cargo Make:
-
-```sh
-cargo install cargo-make
-```
-
 ### pre-commit
 
 Install pre-commit to automatically set up Git hook scripts.
@@ -70,6 +62,20 @@ In Ubuntu, the package to install is `libclang-dev`:
 sudo apt install libclang-dev
 ```
 
+### Cargo Make
+
+To use build scripts from the _Makefile.toml_, install Cargo Make:
+
+```sh
+cargo install cargo-make
+```
+
+Run "setup" to install some tooling dependencies:
+
+```sh
+cargo make setup
+```
+
 ### Running the Local dev server
 
 Use `cargo` to run the dev server locally:
@@ -83,7 +89,7 @@ cargo make dev
 First, install the `outdated` command for `cargo`:
 
 ```sh
-cargo install --locked cargo-outdated
+cargo install cargo-outdated
 ```
 
 Then, update and check for any major dependency changes:

@@ -1,4 +1,4 @@
-[tasks.init]
+[tasks.setup]
 script = '''
     echo # installing git hooks
     pre-commit --version || pip install pre-commit
@@ -20,7 +20,14 @@ script = '''
 
 [tasks.check]
 command = "cargo"
-args = ["clippy", "--tests", "--examples", "--all-targets", "--all-features", "--workspace"]
+args = [
+    "clippy",
+    "--tests",
+    "--examples",
+    "--all-targets",
+    "--all-features",
+    "--workspace",
+]
 
 [tasks.test]
 env = { "RUST_LOG" = "info" }

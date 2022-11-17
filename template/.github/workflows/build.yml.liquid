@@ -24,24 +24,19 @@ jobs:
               env:
                   RUSTDOCFLAGS: -D warnings
 
-    build:
+    publish-dry-run:
+        if: ${{ false }}  # disable for now
+        name: Publish dry run
         runs-on: ubuntu-latest
-        needs: integration
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
 
-            - uses: ./.github/workflows/actions/setup-docker
+            - name: Install Rust toolchain
+              uses: dtolnay/rust-toolchain@stable
 
-            - name: Docker build
-              id: docker_build
-              uses: docker/build-push-action@v2
-              with:
-                  context: ./
-                  file: ./apps/api/Dockerfile
-                  push: false
-                  tags: caster-api:latest
+            - uses: Swatinem/rust-cache@v2
 
-            - name: Image digest
-              run: echo ${{ steps.docker_build.outputs.digest }}
+            - name: Dry run
+              run: cargo publish --dry-run
 {% endraw %}
