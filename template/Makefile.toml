@@ -20,17 +20,17 @@ script = '''
 
 [tasks.check]
 command = "cargo"
-args = ["clippy", "--tests", "--examples", "--all-targets", "--all-features"]
+args = ["clippy", "--tests", "--examples", "--all-targets", "--all-features", "--workspace"]
 
 [tasks.test]
 env = { "RUST_LOG" = "info" }
 command = "cargo"
-args = ["nextest", "run", "${@}"]
+args = ["nextest", "run", "--all-features", "--workspace", "${@}"]
 
 [tasks.test-ci]
 env = { "RUST_LOG" = "info", "RUN_MODE" = "ci" }
 command = "cargo"
-args = ["nextest", "run", "--all-features"]
+args = ["nextest", "run", "--all-features", "--workspace"]
 
 [tasks.docs]
 command = "cargo"
@@ -39,6 +39,7 @@ args = [
     "--no-deps",
     "--all-features",
     "--document-private-items",
+    "--workspace",
     "--examples",
 ]
 
