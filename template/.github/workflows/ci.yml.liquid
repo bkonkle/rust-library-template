@@ -1,133 +1,78 @@
 name: CI # Continuous Integration
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-{% raw  %}
+    pull_request:
+        paths-ignore:
+            - "**.md"
+    push:
+        branches:
+            - main
+        paths-ignore:
+            - "**.md"
+    workflow_dispatch:
+
+env:
+    CARGO_TERM_COLOR: always
+
+{% raw %}
 jobs:
+    lint:
+        name: Lint
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  ref: ${{ github.event.pull_request.head.ref }}
+                  fetch-depth: 0
 
-  test:
-    name: Test Suite
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-      - uses: Swatinem/rust-cache@v1
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --all-features --workspace
+            - name: Install Rust toolchain
+              uses: dtolnay/rust-toolchain@stable
+              with:
+                  components: rustfmt, clippy
 
-  rustfmt:
-    name: Rustfmt
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-          components: rustfmt
-      - uses: Swatinem/rust-cache@v1
-      - name: Check formatting
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+            - uses: davidB/rust-cargo-make@v1
 
-  clippy:
-    name: Clippy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-          components: clippy
-      - uses: Swatinem/rust-cache@v1
-      - name: Clippy check
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: --all-targets --all-features --workspace -- -D warnings
+            - uses: Swatinem/rust-cache@v2
 
-  docs:
-    name: Docs
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-      - uses: Swatinem/rust-cache@v1
-      - name: Check documentation
+            - name: Check formatting
+              run: cargo make format
+
+            - name: Clippy check
+              run: cargo make lint
+
+    test:
+        name: Test Suite
+        runs-on: ubuntu-latest
         env:
-          RUSTDOCFLAGS: -D warnings
-        uses: actions-rs/cargo@v1
-        with:
-          command: doc
-          args: --no-deps --document-private-items --all-features --workspace --examples
+            RUSTFLAGS: -D warnings
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  ref: ${{ github.event.pull_request.head.ref }}
+                  fetch-depth: 0
 
-  publish-dry-run:
-    if: ${{ false }}  # disable for now
-    name: Publish dry run
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-      - uses: Swatinem/rust-cache@v1
-      - uses: actions-rs/cargo@v1
-        with:
-          command: publish
-          args: --dry-run
+            - name: Install Rust toolchain
+              uses: dtolnay/rust-toolchain@stable
+              with:
+                  components: llvm-tools-preview
 
-  coverage:
-    name: Code coverage
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-      - uses: Swatinem/rust-cache@v1
-      - name: Run cargo-tarpaulin
-        uses: actions-rs/tarpaulin@v0.1
-        with:
-          args: '--all-features --workspace --ignore-tests --out Lcov'
-      - name: Upload to Coveralls
-        # upload only if push
-        if: ${{ github.event_name == 'push' }}
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: './lcov.info'
-{% endraw  %}
+            - uses: davidB/rust-cargo-make@v1
+
+            - uses: Swatinem/rust-cache@v2
+
+            - name: Install nextest
+              uses: taiki-e/install-action@nextest
+
+            - name: Install cargo-llvm-cov
+              uses: taiki-e/install-action@cargo-llvm-cov
+
+            - name: Run Unit Tests
+              run: cargo make cov-ci
+
+            - name: Upload coverage data to codecov
+              uses: codecov/codecov-action@v3
+              with:
+                  files: lcov.info
+{% endraw %}
